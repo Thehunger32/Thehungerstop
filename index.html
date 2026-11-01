@@ -328,9 +328,9 @@ return`<div class="page"><button class="back" onclick="go('menu')">← Menu</but
 orders:()=>{const m=me(),sum=MYL.filter(o=>!o.paid&&!o.cx).reduce((s,o)=>s+o.total+(o.dn||0),0);return`<div class="page">${m.ph?idb()+stp('orders'):''}<h2>My Orders</h2>${m.ph?'':lk()}${m.ph?(MYL.length?MYL.map(oc).join('')+(sum?`<button class="btn p" onclick="go('pay')">Go to payment · ${R(sum)}</button>`:''):'<div class="card">Is number par koi order nahi mila.</div>'):''}</div>`},
 thanks:()=>{const t=THX||{amt:0,ids:[],m:''};return`<div class="page"><div class="ok"><div class="tick">✓</div><h2 style="margin:0">${tr('Payment received','भुगतान प्राप्त हुआ')}</h2><p style="margin:6px 0">${tr('Thank you! We have received your payment of','धन्यवाद! आपका भुगतान प्राप्त हुआ:')}</p><div class="big2">${R(t.amt)}</div><b>The Hunger Stop™</b><div class="tags"><span class="tag">${t.m=='online'?'Online (UPI)':'Cash'}</span><span class="tag">${t.ids.join(' + ')}</span></div><small>${tr('Visit again!','फिर पधारें!')}</small></div><button class="btn p" onclick="toBill()">${tr('View / Download bill','बिल देखें / डाउनलोड करें')}</button><button class="btn" onclick="go('home')">← Home</button></div>`},
 pay:()=>{const d=MYL.filter(o=>!o.paid&&!o.cx),sum=d.reduce((s,o)=>s+o.total+(o.dn||0),0),c2=MYL.find(o=>o.id==JUST)||d[0];if(!me().ph)return`<div class="page"><h2>Pay</h2>${lk()}</div>`;
-const ok=JUST&&c2?`${flow(2)}<div class="ok"><div class="tick">✓</div><h2 style="margin:0 0 6px">${tr('Order kitchen ko bhej diya!','ऑर्डर किचन को भेज दिया!')}</h2><div class="tags"><span class="tag">${c2.id}</span>${c2.tok?`<span class="tag">Token ${c2.tok}</span>`:''}<span class="tag">${tg(c2)}</span></div><small>${TB?'Khana taiyaar hote hi aapke table par aayega.':'Aapka order taiyaar ho raha hai.'}</small></div>`:'',m=c2?c2.pay:'cod';
+const ok=JUST&&c2?`${flow(2)}<div class="ok"><div class="tick">✓</div><h2 style="margin:0 0 6px">${tr('Order kitchen ko bhej diya!','ऑर्डर किचन को भेज दिया!')}</h2><div class="tags"><span class="tag">${c2.id}</span>${c2.tok?`<span class="tag">Token ${c2.tok}</span>`:''}<span class="tag">${tg(c2)}</span></div><small>${TB?'Khana taiyaar hote hi aapke table par aayega.':'Aapka order taiyaar ho raha hai.'}</small>${trkBtn(c2)}</div>`:'',m=c2?c2.pay:'cod';
 return`<div class="page">${JUST?'':idb()+stp('pay')}${ok}${sum?`<div class="card pc"><div class="cap">${tr('Amount to pay','देय राशि')}</div><div class="big2">${R(sum)}</div>${d.map(o=>`<div class="row"><small>${o.id} · ${txt(o)}</small><b>${R(o.total)}</b></div>${o.dn?`<div class="row"><small>🙏 Daan</small><b>${R(o.dn)}</b></div>`:''}`).join('')}<div class="mth">${tr('Chosen method','चुना हुआ तरीका')}: <b>${m=='upi'?'Online (UPI)':TB?'Cash (counter par)':'Cash on Delivery'}</b></div></div>
-<button class="btn p" onclick="${m=='upi'?`upiPay(${sum})`:'payCash()'}">${m=='upi'?tr('Pay online','ऑनलाइन भुगतान')+' · '+R(sum):tr('Pay cash','कैश भुगतान')}</button><button class="btn o" onclick="${m=='upi'?'payCash()':`upiPay(${sum})`}">${m=='upi'?tr('Pay cash instead','कैश से भुगतान'):tr('Pay online instead','ऑनलाइन भुगतान')}</button><p class="note2">${TB?'Cash ke liye waiter aapke table par aayega. ':'Cash on Delivery: rider ko dein. '}Online pay ke baad counter aapka bill "Paid" kar dega.</p>${TB&&m!='upi'?`<button class="btn" onclick="toBill()">🧾 ${tr('View bill (cash counter par dein)','बिल देखें (कैश काउंटर पर दें)')}</button>`:''}`:`<div class="card pc" style="text-align:center"><div class="tick">✓</div><h3>${tr('Payment ho gaya','भुगतान हो गया')}</h3><small>Dhanyavaad!</small></div>`}${JUST&&c2?`<button class="btn" onclick="sv('hs_last','${c2.id}');go('track')">${tr('Order status dekhein','ऑर्डर स्टेटस देखें')}</button>`:`<button class="btn ${sum?'':'p'}" onclick="toBill()">${tr('View bill','बिल देखें')}</button>`}${sum||JUST?'':`<button class="btn o" onclick="toRev()">${tr('Give review','रिव्यू दें')}</button>`}</div>`},
+<button class="btn p" onclick="${m=='upi'?`upiPay(${sum})`:'payCash()'}">${m=='upi'?tr('Pay online','ऑनलाइन भुगतान')+' · '+R(sum):tr('Pay cash','कैश भुगतान')}</button><button class="btn o" onclick="${m=='upi'?'payCash()':`upiPay(${sum})`}">${m=='upi'?tr('Pay cash instead','कैश से भुगतान'):tr('Pay online instead','ऑनलाइन भुगतान')}</button><p class="note2">${TB?'Cash ke liye waiter aapke table par aayega. ':'Cash on Delivery: rider ko dein. '}Online pay ke baad counter aapka bill "Paid" kar dega.</p>${TB&&m!='upi'?`<button class="btn" onclick="toBill()">🧾 ${tr('View bill (cash counter par dein)','बिल देखें (कैश काउंटर पर दें)')}</button>`:''}`:`<div class="card pc" style="text-align:center"><div class="tick">✓</div><h3>${tr('Payment ho gaya','भुगतान हो गया')}</h3><small>Dhanyavaad!</small>${trkBtn(MYL.find(x=>x.ty!='dinein'&&!x.cx&&x.st<4))}</div>`}${JUST&&c2?`<button class="btn" onclick="sv('hs_last','${c2.id}');go('track')">${tr('Order status dekhein','ऑर्डर स्टेटस देखें')}</button>`:`<button class="btn ${sum?'':'p'}" onclick="toBill()">${tr('View bill','बिल देखें')}</button>`}${sum||JUST?'':`<button class="btn o" onclick="toRev()">${tr('Give review','रिव्यू दें')}</button>`}</div>`},
 track:()=>{const o=cur();if(!o)return`<div class="page"><button class="back" onclick="go('home')">← Home</button><h2>Order Status</h2>${lk()}</div>`;
 const S=SL(o),dn=o.ty=='dinein',p=o.st<3?0:o.st>3?1:Math.min(.92,(Date.now()-(o.t3||o.t))/45000),[x,y]=rider(p);
 return`<div class="page">${idb()}${stp('orders')}<h2 style="margin-top:14px">Order <span class="gold">${o.id}</span>${o.tok?` <span class="tag">Token ${o.tok}</span>`:''}</h2>
@@ -451,20 +451,25 @@ const billTone=()=>{if(role&&!snd)return;window.__ev=1;tones([1319,1568,2093],.0
 [['prBill'],['prBillHD'],['dlBill'],['dlAll']].forEach(([n])=>{const f=window[n];window[n]=function(){billTone();return f.apply(this,arguments)}});
 
 /* ===== LIVE RIDER TRACKING ===== */
-let RL=null,RM=null,RMK=null,RMC=null;
+let RL=null,RM=null,RMK=null,RMC=null,RML=null;
+const hav=(a,b)=>{const r=x=>x*Math.PI/180,dA=r(b[0]-a[0]),dO=r(b[1]-a[1]),h=Math.sin(dA/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dO/2)**2;return 2*6371000*Math.asin(Math.sqrt(h))};
+const dTxt=m=>m<60?'bas pahunchne wala hai':'aapse '+(m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1)+' km')+' door';
 function rmapSync(){try{const el=document.getElementById('rmap');
-if(!el){if(RM){try{RM.remove()}catch(e){}RM=null;RMK=null;RMC=null}return}
+if(!el){if(RM){try{RM.remove()}catch(e){}RM=null;RMK=null;RMC=null;RML=null}return}
 if(!RL)return;
 if(!window.LF){el.innerHTML='<div style="padding:20px;text-align:center"><small>Map load nahi ho paya. Internet check karein.</small></div>';return}
-const ll=[RL.lat,RL.lng];
+const ll=[RL.lat,RL.lng],co=cur(),hp=co&&adXY(co.ad);
 if(!RM||RMC!==el){if(RM){try{RM.remove()}catch(e){}}
 RM=LF.map(el).setView(ll,16);
 LF.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(RM);
+RML=hp?LF.polyline([ll,hp],{color:'#f5b400',weight:6,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(RM):null;
+if(hp)LF.marker(hp,{icon:LF.divIcon({className:'rmk',html:'<div class="rpin">🏠</div>',iconSize:[40,40],iconAnchor:[20,36]})}).addTo(RM);
 RMK=LF.marker(ll,{icon:LF.divIcon({className:'rmk',html:'<div class="rpin">🛵</div>',iconSize:[40,40],iconAnchor:[20,20]})}).addTo(RM);RMC=el;
-const co=cur(),hd=co&&adXY(co.ad);if(hd){LF.marker(hd,{icon:LF.divIcon({className:'rmk',html:'<div class="rpin">🏠</div>',iconSize:[40,40],iconAnchor:[20,36]})}).addTo(RM);RM.fitBounds([ll,hd],{padding:[40,40],maxZoom:17})}}
-else{RMK.setLatLng(ll);if(!RM.getBounds().contains(ll))RM.panTo(ll)}
-const ag=(RL.age||0)+Math.round((Date.now()-RL.at)/1000),a=document.getElementById('rage');
-if(a)a.textContent=ag<20?'🟢 Rider live hai':ag<90?'Location '+ag+' sec purani':'⚠ Location '+Math.round(ag/60)+' min purani hai, rider ka signal kamzor ho sakta hai'}catch(e){}}
+if(hp)RM.fitBounds([ll,hp],{padding:[40,40],maxZoom:17})}
+else{RMK.setLatLng(ll);if(RML&&hp)RML.setLatLngs([ll,hp]);
+const b=RM.getBounds();if(hp?!(b.contains(ll)&&b.contains(hp)):!b.contains(ll)){if(hp)RM.fitBounds([ll,hp],{padding:[40,40],maxZoom:17});else RM.panTo(ll)}}
+const ag=(RL.age||0)+Math.round((Date.now()-RL.at)/1000),a=document.getElementById('rage'),dd=hp?' · '+dTxt(hav(ll,hp)):'';
+if(a)a.textContent=(ag<20?'🟢 Rider live hai':ag<90?'Location '+ag+' sec purani':'⚠ Location '+Math.round(ag/60)+' min purani hai, signal kamzor ho sakta hai')+dd}catch(e){}}
 function rLink(id){const o=ORD.find(x=>x.id==id);if(!o||!o.rk)return;
 const url=BASE()+'?rider='+encodeURIComponent(o.id)+'&k='+encodeURIComponent(o.rk);
 const msg='The Hunger Stop delivery '+o.id+'. Is link ko kholkar "Tracking shuru karo" dabayein: '+url;
@@ -473,6 +478,7 @@ if(d.length==10){window.open('https://wa.me/91'+d+'?text='+encodeURIComponent(ms
 try{navigator.clipboard.writeText(url).then(()=>toast('Link copy ho gaya. Rider ko bhej dein'),()=>prompt('Link copy karein',url))}catch(e){prompt('Link copy karein',url)}}
 
 /* ===== CUSTOMER LIVE LOCATION IN ADDRESS ===== */
+const trkBtn=o=>o&&o.ty!='dinein'&&!o.cx&&o.st<4?`<button class="btn p" style="margin:12px 0 0" onclick="sv('hs_last','${o.id}');go('track')">📍 Track order</button>`:'';
 const PINRE=/\n?📍 Live location: \S+/;
 const adXY=a=>{const m=String(a||'').match(/maps\.google\.com\/\?q=(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/);return m?[+m[1],+m[2]]:null};
 const adClean=a=>String(a||'').replace(PINRE,'').trim();
